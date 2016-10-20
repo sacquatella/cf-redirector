@@ -15,6 +15,22 @@ Hey, it's Cloud Foundry!
     cf set-env point-a STATUS_3XX 301
     cf start
 
+If you want, you can also just run `./deploy`:
+
+    ./deploy
+    Where do you want to redirect? > ...
+
+The `./deploy` script passes through the environment variables
+used to configure the application (see next section) if they are
+present in the calling environment:
+
+    DEBUG=1 ./deploy
+
+You can also specify whatever additional `cf push` arguments you
+want, such as the hostname and domain of the new app:
+
+    DEBUG=1 ./deploy --hostname host-a --domain my.cf.tld
+
 Configuration
 --------------
 
@@ -37,4 +53,3 @@ To configure these, use `cf set-env` and then restage your app:
 
     cf set-env my-redirector REDIRECT_SCHEME=http
     cf restage my-redirector
-

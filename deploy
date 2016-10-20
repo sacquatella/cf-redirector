@@ -1,0 +1,48 @@
+#!/bin/bash
+
+#
+# deploy - Deploy the cf-redirector with minimal fuss
+#
+# USAGE: ./deploy [cf push arguments]
+#
+# Passes through the following environment variables to the
+# app (via cf set-env):
+#
+#    - REDIRECT_SCHEME
+#    - STATUS_3XX
+#    - DEBUG
+#    - REDIRECT_TO (since this is required, you will be
+#                   prompted to provide this, if missing)
+#
+
+if [[ -z ${REDIRECT_TO} ]]; then
+  while :; do
+    echo -n "Where do you want to redirect? > "
+    read url_given
+    url=$(sed -e 's@^https?://@@;s@/.*@@' <<<$url_given)
+    if [[ $url != "" ]]; then
+      if [[ $url != $url_given ]]; then
+        echo
+        echo -n "Did you mean '$url'? [y/N] "
+        read yesno
+        case ${yesno} in
+        (y|yes) ;;
+        (*)
+          echo >&2 "exiting without deploying..."
+          exit 1
+          ;;
+        esac
+      fi
+      REDIRECT_TO=${url}
+      break
+    fi
+  done
+fi
+
+name="redirector-$(sha1sum <<<$url | sed -e 's/\(........\).*/\1/')"
+cf push --no-start "${name}" $*
+cf set-env "${name}" REDIRECT_TO "${REDIRECT_TO}"
+test -n "${REDIRECT_SCHEME}" && cf set-env "${name}" REDIRECT_SCHEME "${REDIRECT_SCHEME}"
+test -n "${STATUS_3XX}"      && cf set-env "${name}" STATUS_3XX      "${STATUS_3XX}"
+test -n "${DEBUG}"           && cf set-env "${name}" DEBUG           "${DEBUG}"
+cf start "${name}"
