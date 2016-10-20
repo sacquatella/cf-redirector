@@ -51,5 +51,5 @@ Configuration is done entirely through environment variables:
 
 To configure these, use `cf set-env` and then restage your app:
 
-    cf set-env my-redirector REDIRECT_SCHEME=http
+    cf set-env my-redirector REDIRECT_SCHEME http
     cf restage my-redirector
