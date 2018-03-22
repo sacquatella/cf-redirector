@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func main() {
@@ -19,6 +20,13 @@ func main() {
 		fmt.Fprintf(os.Stderr, "do you need to `cf set-env REDIRECT_TO host-or-ip'?\n")
 		os.Exit(1)
 	}
+	path := ""
+	if strings.Contains(host, "/") {
+		l := strings.SplitN(host, "/", 2)
+		host = l[0]
+		path = l[1]
+	}
+
 	scheme := os.Getenv("REDIRECT_SCHEME")
 	if scheme == "" {
 		scheme = "https"
@@ -49,6 +57,9 @@ func main() {
 		}
 		r.URL.Scheme = scheme
 		r.URL.Host = host
+		if path != "" {
+			r.URL.Path = path
+		}
 		w.Header().Add("Location", r.URL.String())
 		if debug {
 			fmt.Fprintf(os.Stderr, "   (%d) -> %s\n", status, r.URL.String())
