@@ -1,3 +1,6 @@
+---
 applications:
   - name: cf-redirector
     memory: 128M
+    path: .
+    buildpack: binary_buildpack

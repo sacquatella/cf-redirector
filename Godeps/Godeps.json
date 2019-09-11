@@ -1,6 +1,0 @@
-{
-	"ImportPath": "cloudfoundry-community/cf-redirector",
-	"GoVersion": "go1.6",
-	"GodepVersion": "v74",
-	"Deps": []
-}

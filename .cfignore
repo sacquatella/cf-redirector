@@ -1,0 +1,5 @@
+Makefile
+deploy
+*.go
+*.mod
+*.md

@@ -7,6 +7,8 @@ standard HTTP 3xx redirection mechanisms.
 
 Deployment
 ----------
+Build binary
+    make buildcf
 
 Hey, it's Cloud Foundry!
 

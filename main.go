@@ -1,8 +1,8 @@
 package main
 
 import (
-	"net/http"
 	"fmt"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -51,7 +51,7 @@ func main() {
 
 	debug := os.Getenv("DEBUG") != ""
 
-	http.HandleFunc("/", func (w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if debug {
 			fmt.Fprintf(os.Stderr, "redirecting %s\n", r.URL.String())
 		}
